@@ -1,0 +1,266 @@
+:root {
+  --kodak-yellow-1: #ffc21f;
+  --kodak-yellow-2: #f5a800;
+  --kodak-yellow-edge: #d98b00;
+  --plastic-dark: #2b2b2f;
+  --plastic-dark-2: #17171a;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: -apple-system, "SF Pro Text", Helvetica, Arial, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.stage {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- camera body ---------- */
+.camera {
+  position: relative;
+  width: 520px;
+  height: 223px;
+  border-radius: 22px;
+  -webkit-app-region: drag; /* whole body drags the frameless window */
+  background:
+    linear-gradient(180deg, var(--kodak-yellow-1) 0%, var(--kodak-yellow-2) 55%, var(--kodak-yellow-edge) 100%);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -10px 22px rgba(160, 95, 0, 0.35),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.08),
+    0 26px 50px rgba(60, 40, 0, 0.35),
+    0 4px 10px rgba(0, 0, 0, 0.2);
+}
+/* subtle textured plastic grain */
+.camera::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ---------- viewfinder ---------- */
+.viewfinder {
+  position: absolute;
+  left: 4.2%;
+  top: 11%;
+  width: 9.8%;
+  height: 22%;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #3a3a3f, #1c1c20);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.viewfinder span {
+  width: 62%;
+  height: 52%;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #fafafa, #d7d7da);
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.25);
+}
+
+/* ---------- the mini screen ---------- */
+.screen {
+  position: absolute;
+  left: 18%;
+  top: 13%;
+  width: 60%;
+  height: 76%;
+  border-radius: 14px;
+  background: #0b0b0d;
+  padding: 9px;
+  box-shadow:
+    inset 0 0 0 2px rgba(0,0,0,0.9),
+    inset 0 4px 10px rgba(0,0,0,0.8),
+    0 2px 0 rgba(255,255,255,0.3);
+  overflow: hidden;
+}
+.screen > #screen-canvas,
+.screen > #review-img {
+  position: absolute;
+  inset: 9px;
+  width: calc(100% - 18px);
+  height: calc(100% - 18px);
+  border-radius: 7px;
+  object-fit: cover;
+  background: #000;
+  display: block;
+}
+#review-img[hidden] { display: none; }
+
+/* flash overlay */
+.flash {
+  position: absolute;
+  inset: 9px;
+  border-radius: 7px;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+.flash.fire { animation: flash 320ms ease-out; }
+@keyframes flash {
+  0% { opacity: 0; }
+  8% { opacity: 0.95; }
+  100% { opacity: 0; }
+}
+
+/* status text (camera errors / hints) */
+.status {
+  position: absolute;
+  inset: 9px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 18px;
+  color: #d8d8d8;
+  font-size: 13px;
+  line-height: 1.4;
+  background: #0b0b0d;
+  z-index: 3;
+}
+.status[hidden] { display: none; }
+
+/* mode / counter badge */
+.badge {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 4;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #fff;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+}
+.badge[hidden] { display: none; }
+.badge.live { color: #ff5b5b; }
+.badge.live::before {
+  content: "●";
+  margin-right: 5px;
+  font-size: 9px;
+  vertical-align: middle;
+}
+
+/* ---------- controls ---------- */
+.ctrl {
+  position: absolute;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  -webkit-app-region: no-drag;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #4a4a50 0%, #2a2a2f 55%, #151518 100%);
+  box-shadow:
+    inset 0 2px 2px rgba(255,255,255,0.22),
+    inset 0 -3px 5px rgba(0,0,0,0.5),
+    0 4px 7px rgba(0,0,0,0.35);
+  transition: transform 60ms ease, box-shadow 60ms ease;
+}
+.ctrl svg { width: 44%; height: 44%; fill: #e8e8e8; }
+.ctrl:active {
+  transform: translate(-50%, -50%) scale(0.92);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.7);
+}
+.arrow {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+#btn-up   { left: 90.5%; top: 24%; }
+#btn-down { left: 90.5%; top: 49%; }
+.shutter {
+  left: 90.5%;
+  top: 76%;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  transform: translate(-50%, -50%);
+}
+.shutter svg { width: 40%; height: 40%; }
+
+.exit {
+  left: 8.5%;
+  top: 49%;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.exit svg { width: 40%; height: 40%; fill: #e8e8e8; }
+.delete {
+  left: 8.5%;
+  top: 75%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.delete svg { fill: #ff8b8b; }
+.delete.dim { opacity: 0.4; }        /* live view: present but inactive */
+.delete.dim svg { fill: #cfcfcf; }
+.ctrl[hidden] { display: none; }
+
+/* ---------- keychain loop ---------- */
+.keychain {
+  position: absolute;
+  left: 99%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  border-radius: 0 40% 40% 0 / 0 50% 50% 0;
+  background: linear-gradient(180deg, var(--kodak-yellow-1), var(--kodak-yellow-edge));
+  box-shadow: 0 6px 10px rgba(60,40,0,0.3);
+}
+.keychain::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #dcdce1 0%, #dcdce1 42%, transparent 44%);
+  box-shadow: inset 0 0 0 3px rgba(150,95,0,0.4);
+}
+.keychain:active { filter: brightness(0.95); }
+
+/* ---------- hint line ---------- */
+.hint {
+  margin: 0;
+  color: #6b6b72;
+  font-size: 12.5px;
+  letter-spacing: 0.2px;
+}
+.hint b { color: #48484e; }

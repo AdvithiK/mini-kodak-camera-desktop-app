@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; img-src 'self' data:; media-src 'self' blob:; style-src 'self' 'unsafe-inline';" />
+    <title>Kodak Mini</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="stage">
+      <div class="camera" role="application" aria-label="Kodak Mini camera">
+        <!-- viewfinder window -->
+        <div class="viewfinder" aria-hidden="true"><span></span></div>
+
+        <!-- the mini screen -->
+        <div class="screen">
+          <canvas id="screen-canvas" width="1280" height="696"></canvas>
+          <img id="review-img" alt="captured photo" hidden />
+          <div id="flash" class="flash"></div>
+          <div id="status" class="status">Starting camera…</div>
+          <div id="badge" class="badge" hidden></div>
+        </div>
+
+        <!-- controls -->
+        <button class="ctrl arrow" id="btn-up" title="Previous photo (↑)" aria-label="Previous photo">
+          <svg viewBox="0 0 24 24"><path d="M12 7l6 9H6z"/></svg>
+        </button>
+        <button class="ctrl arrow" id="btn-down" title="Next photo (↓)" aria-label="Next photo">
+          <svg viewBox="0 0 24 24"><path d="M12 17L6 8h12z"/></svg>
+        </button>
+        <button class="ctrl shutter" id="btn-shutter" title="Take photo (Space)" aria-label="Shutter">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="ctrl exit" id="btn-exit" title="Quit (⌘Q)" aria-label="Quit app">
+          <svg viewBox="0 0 24 24"><path d="M6.4 5L5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4 17.6 5 12 10.6z"/></svg>
+        </button>
+        <button class="ctrl delete dim" id="btn-delete" title="Delete this photo (⌫)" aria-label="Delete photo">
+          <svg viewBox="0 0 24 24"><path d="M9 3h6l1 2h4v2H4V5h4l1-2zM6 9h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 9z"/></svg>
+        </button>
+
+        <!-- keychain loop = open photo folder -->
+        <button class="keychain" id="keychain" title="Open photo folder" aria-label="Open photo folder"></button>
+      </div>
+    </div>
+    <script src="renderer.js"></script>
+  </body>
+</html>
