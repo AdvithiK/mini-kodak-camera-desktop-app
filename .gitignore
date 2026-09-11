@@ -3,3 +3,7 @@ node_modules/
 *.log
 dist/
 out/
+
+# packaging: keep the final icon.icns, ignore regeneratable intermediates
+build/icon.png
+build/icon.iconset/

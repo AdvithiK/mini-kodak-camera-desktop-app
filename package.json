@@ -5,11 +5,35 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "node --test"
+    "test": "node --test",
+    "icon": "electron tools/make-icon.js",
+    "dist": "electron-builder --mac --dir"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^32.0.0"
+    "electron": "^32.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.advithik.kodakmini",
+    "productName": "Kodak Mini",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "styles.css",
+      "renderer.js",
+      "lib/**/*"
+    ],
+    "mac": {
+      "target": "dir",
+      "category": "public.app-category.photography",
+      "icon": "build/icon.icns"
+    }
   }
 }
