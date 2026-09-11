@@ -9,7 +9,36 @@
   </head>
   <body>
     <div class="stage">
-      <div class="camera" role="application" aria-label="Kodak Mini camera">
+      <div class="flip-card" id="flip-card">
+
+      <!-- ============ FRONT FACE (Kodak Charmera) ============ -->
+      <div class="face face-front">
+        <div class="camera-front shell" role="img" aria-label="Kodak Charmera camera front">
+          <!-- small green indicator window -->
+          <div class="fr-indicator" aria-hidden="true"></div>
+          <!-- retro rainbow stripe band -->
+          <div class="fr-stripes" aria-hidden="true"></div>
+          <!-- wordmark -->
+          <div class="fr-wordmark" aria-hidden="true">
+            <div class="fr-brand">
+              <span class="fr-kodak">Kodak</span><span class="fr-charmera">Charmera</span>
+            </div>
+            <div class="fr-sub">KEYCHAIN DIGITAL CAMERA</div>
+          </div>
+          <!-- year -->
+          <div class="fr-year" aria-hidden="true">1987</div>
+          <!-- lens -->
+          <div class="fr-lens" aria-hidden="true"></div>
+          <!-- viewfinder window -->
+          <div class="fr-vf" aria-hidden="true"></div>
+          <!-- keychain loop (left, decorative on the front) -->
+          <div class="keychain keychain-left" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- ============ BACK FACE (the mini screen + controls) ============ -->
+      <div class="face face-back">
+      <div class="camera shell" role="application" aria-label="Kodak Mini camera">
         <!-- viewfinder window -->
         <div class="viewfinder" aria-hidden="true"><span></span></div>
 
@@ -42,6 +71,9 @@
         <!-- keychain loop = open photo folder -->
         <button class="keychain" id="keychain" title="Open photo folder" aria-label="Open photo folder"></button>
       </div>
+      </div><!-- /.face-back -->
+
+      </div><!-- /.flip-card -->
     </div>
     <script src="renderer.js"></script>
   </body>

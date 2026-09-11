@@ -11,4 +11,8 @@ contextBridge.exposeInMainWorld('kodak', {
   openFolder: () => ipcRenderer.invoke('open-folder'),
   /** Quit the app. */
   quit: () => ipcRenderer.invoke('quit-app'),
+  /** Begin a manual window drag (records the current window position). */
+  dragStart: () => ipcRenderer.send('drag-start'),
+  /** Move the window by (dx, dy) from where the drag started. */
+  dragMove: (dx, dy) => ipcRenderer.send('drag-move', { dx, dy }),
 });

@@ -12,6 +12,9 @@ const WIN_HEIGHT = 360;
 
 const PHOTO_DIR = path.join(os.homedir(), 'Pictures', 'KodakMini');
 
+let mainWin = null;
+let dragOrigin = null; // window [x, y] at the start of a manual drag
+
 function ensurePhotoDir() {
   fs.mkdirSync(PHOTO_DIR, { recursive: true });
 }
@@ -34,6 +37,7 @@ function createWindow() {
     },
   });
 
+  mainWin = win;
   win.setMenuBarVisibility(false);
 
   // Forward renderer console + crashes to stdout so the app is observable
@@ -83,6 +87,17 @@ ipcMain.handle('open-folder', async () => {
 // Quit the app (the frameless window has no OS close button).
 ipcMain.handle('quit-app', () => {
   app.quit();
+});
+
+// ----- manual window dragging -----
+// (app-region drag swallows click/dblclick, which we need for flip-to-back.)
+ipcMain.on('drag-start', () => {
+  if (mainWin) dragOrigin = mainWin.getPosition();
+});
+ipcMain.on('drag-move', (_event, { dx, dy }) => {
+  if (mainWin && dragOrigin) {
+    mainWin.setPosition(Math.round(dragOrigin[0] + dx), Math.round(dragOrigin[1] + dy));
+  }
 });
 
 app.whenReady().then(() => {

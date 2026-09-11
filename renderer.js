@@ -31,6 +31,7 @@ const btnShutter = document.getElementById('btn-shutter');
 const btnDelete = document.getElementById('btn-delete');
 const btnExit = document.getElementById('btn-exit');
 const keychain = document.getElementById('keychain');
+const flipCard = document.getElementById('flip-card');
 
 const W = canvas.width;
 const H = canvas.height;
@@ -41,6 +42,7 @@ video.muted = true;
 video.playsInline = true;
 
 let streamReady = false;
+let face = 'front'; // 'front' | 'back' — which side of the camera is showing
 let mode = 'live'; // 'live' | 'review'
 const photos = []; // { dataUrl } newest last
 let reviewIndex = 0;
@@ -300,6 +302,72 @@ async function startCamera() {
   }
 }
 
+// Stop the webcam (turns the camera light off) when we flip to the front.
+function stopCamera() {
+  const stream = video.srcObject;
+  if (stream) {
+    stream.getTracks().forEach((t) => t.stop());
+    video.srcObject = null;
+  }
+  streamReady = false;
+}
+
+// Start the webcam if it isn't already running (on flip to the back).
+async function ensureCamera() {
+  if (streamReady && video.srcObject) return;
+  statusEl.hidden = false;
+  statusEl.textContent = 'Starting camera…';
+  await startCamera();
+}
+
+// ----- flip between front and back -----
+function setFace(next) {
+  if (next === face) return;
+  face = next;
+  if (face === 'back') {
+    flipCard.classList.add('flipped');
+    ensureCamera();
+  } else {
+    flipCard.classList.remove('flipped');
+    stopCamera();
+  }
+}
+
+function toggleFace() {
+  setFace(face === 'front' ? 'back' : 'front');
+}
+
+// Double-click anywhere on the camera (but not on a control) flips it over.
+flipCard.addEventListener('dblclick', (e) => {
+  if (e.target.closest('.ctrl, .keychain')) return;
+  toggleFace();
+});
+
+// ----- manual window dragging (frameless window has no title bar) -----
+let dragging = false;
+let dragMoved = false;
+let dragStartX = 0;
+let dragStartY = 0;
+const DRAG_THRESHOLD = 3; // px before we treat it as a drag (not a click)
+
+window.addEventListener('mousedown', (e) => {
+  if (e.button !== 0) return;
+  if (e.target.closest('.ctrl, #keychain')) return; // don't drag from buttons
+  dragging = true;
+  dragMoved = false;
+  dragStartX = e.screenX;
+  dragStartY = e.screenY;
+  if (window.kodak && window.kodak.dragStart) window.kodak.dragStart();
+});
+window.addEventListener('mousemove', (e) => {
+  if (!dragging) return;
+  const dx = e.screenX - dragStartX;
+  const dy = e.screenY - dragStartY;
+  if (!dragMoved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+  dragMoved = true;
+  if (window.kodak && window.kodak.dragMove) window.kodak.dragMove(dx, dy);
+});
+window.addEventListener('mouseup', () => { dragging = false; });
+
 console.log('renderer booted');
-startCamera();
 requestAnimationFrame(renderFrame);
