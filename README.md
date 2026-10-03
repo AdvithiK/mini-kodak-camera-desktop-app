@@ -7,7 +7,7 @@ your desktop. It has **two sides**: it sits showing the **front** of the camera
 the **back**, where a live, retro-filtered preview plays on the mini screen.
 Press the shutter to snap a warm, grainy, film-look photo straight to a folder.
 
-![Kodak mini camera face](interface_reference.webp)
+
 
 ## Two sides, one double-click
 
